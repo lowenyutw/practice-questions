@@ -3,7 +3,7 @@
 #include <time.h>
 #define swap(x, y){int tmp; tmp = x; x = y; y = tmp;}
 
-void quick_sort(int* arr, int left, int right)
+int* quick_sort(int* arr, int left, int right, int * steps)
 {
 	if (left < right)
 	{
@@ -21,14 +21,15 @@ void quick_sort(int* arr, int left, int right)
 				break;
 			}
 			swap(arr[i], arr[j]);
+			*steps += 1;
 		}
 
-		quick_sort(arr, left, i - 1);
-		quick_sort(arr, j + 1, right);
+		quick_sort(arr, left, i - 1, steps);
+		quick_sort(arr, j + 1, right, steps);
 	}
 }
 
-void bubble_sort(int* arr, int input_max)
+void bubble_sort(int* arr, int input_max,int* steps)
 {
 	for (int i = 0; i < input_max; i++)
 	{
@@ -37,6 +38,7 @@ void bubble_sort(int* arr, int input_max)
 			if (arr[j] > arr[j + 1])
 			{
 				swap(arr[j], arr[j + 1]);
+				*steps += 1;
 			}
 		}
 	}
@@ -92,26 +94,26 @@ void print_data(int* arr, int input_max)
 
 int main()
 {
-	int input_max;
+	int input_max, bubble_steps = 0, quick_steps = 0;
 	double start, end;
 
 	int* arr = array_make(&input_max);
 	int* bubble_arr = array_copy(arr, input_max);
 	int* quick_arr = array_copy(arr, input_max);
 
+	printf("Number of input data:%d\n\n", input_max);
 	//print_data(arr, input_max);
-	printf("input data:%d\n", input_max);
 
 	start = clock();
-	bubble_sort(bubble_arr, input_max);
+	bubble_sort(bubble_arr, input_max, &bubble_steps);
 	end = clock();
-	printf("Bubble sort usage time:%lf\n", (end - start) / CLOCKS_PER_SEC);
+	printf("Number of bubble swaps:%d    Bubble sort usage time:%lf\n\n", bubble_steps, (end - start) / CLOCKS_PER_SEC);
 	//print_data(bubble_arr, input_max);
 
 	start = clock();
-	quick_sort(quick_arr, 0, input_max - 1);
+	quick_sort(quick_arr, 0, input_max - 1, &quick_steps);
 	end = clock();
-	printf("Quick sort usage time:%lf\n", (end - start) / CLOCKS_PER_SEC);
+	printf("Number of quick swaps:%d    Quick sort usage time:%lf\n\n", quick_steps, (end - start) / CLOCKS_PER_SEC);
 	//print_data(quick_arr, input_max);
 
 	//system("PAUSE");
