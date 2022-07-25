@@ -107,13 +107,13 @@ int main()
 	start = clock();
 	bubble_sort(bubble_arr, input_max, &bubble_steps);
 	end = clock();
-	printf("Number of bubble swaps:%d    Bubble sort usage time:%lf\n\n", bubble_steps, (end - start) / CLOCKS_PER_SEC);
+	printf("Number of bubble swaps:%d    Bubble sort usage time:%lfs\n\n", bubble_steps, (end - start) / CLOCKS_PER_SEC);
 	//print_data(bubble_arr, input_max);
 
 	start = clock();
 	quick_sort(quick_arr, 0, input_max - 1, &quick_steps);
 	end = clock();
-	printf("Number of quick swaps:%d    Quick sort usage time:%lf\n\n", quick_steps, (end - start) / CLOCKS_PER_SEC);
+	printf("Number of quick swaps:%d    Quick sort usage time:%lfs\n\n", quick_steps, (end - start) / CLOCKS_PER_SEC);
 	//print_data(quick_arr, input_max);
 
 	//system("PAUSE");
