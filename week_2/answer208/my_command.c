@@ -6,12 +6,11 @@
 int main()
 {
 	char s[MAX];
-	char* str, * np, * t;
+	char* str, * np;
 
 	while (fgets(s, MAX, stdin) != NULL)
 	{
 		str = s;
-		t = str;
 		*(str + (strlen(str) - 1)) = '\0';
 
 		if ((np = strstr(str, " < ")) != NULL)
