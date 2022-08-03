@@ -21,7 +21,7 @@ int main()
 
 		*(str + (strlen(str) - 1)) = '\0';
 
-		if ((np = strstr(str, "|")) != NULL)
+		if ((np = strchr(str,  '|')) != NULL)
 		{
 			pipe = 1;
 			*np = ' ';
@@ -78,23 +78,22 @@ int main()
 		}
 		else
 		{
-			printf("command name:%s\ninput:console\n", str);
+			printf("command name:%s\ninput:%s\n", str, input);
 		}
 
 		if (pipe)
 		{
 			if (in)
 			{
-				printf("input:%s", input);
+				printf("input:%s\n", input);
 			}
 
 			if (out)
 			{
-				printf("output:%s", output);
+				printf("output:%s\n", output);
 			}
-
-			printf("\n");
 		}
+		printf("\n");
 	}
 
 	return 0;
