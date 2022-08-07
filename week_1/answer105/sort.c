@@ -1,9 +1,22 @@
+
+/*
+bubble sortは値を1つずつ比較してから値を交換しますが、
+一度に交換するのは前後の値の1つだけですが、
+これは必ず再比較してから比較を繰り返し、交換を繰り返します。
+値の比較と交換が大幅に増加します。
+
+quick sortは、ある値を中間値として選び、
+それ以外の値を中間値よりも小さいものと中間値よりも大きいものに分割するというもので、
+少なくとも 一つの辺が中央値よりも小さいか大きいと判断されます。
+これを繰り返し行うことで、必要な比較と値交換の回数を大幅に減らすことができます。
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #define swap(x, y){int tmp; tmp = x; x = y; y = tmp;}
 
-int* quick_sort(int* arr, int left, int right, int * steps)
+int* quick_sort(int* arr, int left, int right, int* steps)
 {
 	if (left < right)
 	{
@@ -29,7 +42,7 @@ int* quick_sort(int* arr, int left, int right, int * steps)
 	}
 }
 
-void bubble_sort(int* arr, int input_max,int* steps)
+void bubble_sort(int* arr, int input_max, int* steps)
 {
 	for (int i = 0; i < input_max; i++)
 	{
@@ -83,7 +96,7 @@ void print_data(int* arr, int input_max)
 {
 	for (int i = 0; i < input_max; i++)
 	{
-		printf("%d.%d  ", i+1, arr[i]);
+		printf("%d.%d  ", i + 1, arr[i]);
 		if (i > 0 && i % 10 == 0)
 		{
 			printf("\n");
@@ -101,19 +114,19 @@ int main()
 	int* bubble_arr = array_copy(arr, input_max);
 	int* quick_arr = array_copy(arr, input_max);
 
-	printf("Number of input data:%d\n\n", input_max);
+	printf("number of input data:%d\n\n", input_max);
 	//print_data(arr, input_max);
 
 	start = clock();
 	bubble_sort(bubble_arr, input_max, &bubble_steps);
 	end = clock();
-	printf("Number of bubble swaps:%d    Bubble sort usage time:%lfs\n\n", bubble_steps, (end - start) / CLOCKS_PER_SEC);
+	printf("Bubble steps:%d    Bubble sort usage time:%lf\n\n", bubble_steps, (end - start) / CLOCKS_PER_SEC);
 	//print_data(bubble_arr, input_max);
 
 	start = clock();
 	quick_sort(quick_arr, 0, input_max - 1, &quick_steps);
 	end = clock();
-	printf("Number of quick swaps:%d    Quick sort usage time:%lfs\n\n", quick_steps, (end - start) / CLOCKS_PER_SEC);
+	printf("Quick steps:%d    Quick sort usage time:%lf\n\n", quick_steps, (end - start) / CLOCKS_PER_SEC);
 	//print_data(quick_arr, input_max);
 
 	//system("PAUSE");

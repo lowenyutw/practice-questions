@@ -10,6 +10,7 @@ int main()
 	char console[] = "console";
 	int pipe, in, out;
 
+	printf("Usage: [command_1] [redirection_1] [file_1] [command_2] [redirection_2] [file_2]\n");
 	while (fgets(s, MAX, stdin) != NULL)
 	{
 		str = s;

@@ -3,6 +3,33 @@
 #include <ctype.h>
 #define MAX 2048
 
+void file_print(char* str, const char target)
+{
+	while (!isalpha(*str) && *str)
+	{
+		str++;
+	}
+
+	if (*str != '\0')
+	{
+		if (target == '<')
+		{
+			printf("input: ");
+		}
+
+		if (target == '>')
+		{
+			printf("output: ");
+		}
+
+		while (isalpha(*str))
+		{
+			printf("%c", *str++);
+		}
+		printf("\n");
+	}
+}
+
 char* command(char* str, const char target)
 {
 	char* np, * s, * error;
@@ -60,33 +87,6 @@ char* command(char* str, const char target)
 	}
 }
 
-void file_print(char* str,const char target)
-{
-	while (!isalpha(*str) && *str)
-	{
-		str++;
-	}
-
-	if (*str != '\0')
-	{
-		if (target == '<')
-		{
-			printf("input: ");
-		}
-
-		if (target == '>')
-		{
-			printf("output: ");
-		}
-
-		while (isalpha(*str))
-		{
-			printf("%c", *str++);
-		}
-		printf("\n");
-	}
-}
-
 void pipe(char* str, char* p, const char target)
 {
 	char* np, * error;
@@ -110,6 +110,8 @@ int main()
 	char s[MAX];
 	char* str = s;
 	char* input,* output;
+
+	printf("Usage: [command_1][redirection_1][file_1] [command_2][redirection_2][file_2]\n");
 
 	while (fgets(s, MAX, stdin) != NULL)
 	{
