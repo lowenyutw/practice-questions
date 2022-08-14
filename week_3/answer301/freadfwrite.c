@@ -2,19 +2,22 @@
 #include <stdlib.h>
 #include <time.h>
 
-double copy_time(FILE* fps, FILE* fpd)
+double copy_time(FILE* fps, FILE* fpd, int max)
 {
 	double start, end;
 	int c;
+	char* s = malloc(max);
 
 	start = clock();
 
-	while ((c = fgetc(fps)) != EOF)
+	while ((c = fread(s, 1, max, fps)) > 0)
 	{
-		fputc(c, fpd);
+		fwrite(s, c, 1, fpd);
 	}
 
 	end = clock();
+
+	free(s);
 
 	return (end - start) / CLOCKS_PER_SEC;
 }
@@ -54,7 +57,6 @@ int main(int argc, char* argv[])
 	fps = fopen(argv[2], "r");
 	if (fps == NULL)
 	{
-
 		char file_name[80];
 		int max = 67108864;
 
@@ -87,7 +89,7 @@ int main(int argc, char* argv[])
 				fps = fopen(file_name, "r");
 				fpd = fopen(argv[1], "w");
 
-				time_consume[i] = copy_time(fps, fpd);
+				time_consume[i] = copy_time(fps, fpd, 65536);
 
 				fclose(fps);
 				fclose(fpd);
@@ -103,7 +105,7 @@ int main(int argc, char* argv[])
 			fps = fopen(argv[2], "r");
 			fpd = fopen(argv[1], "w");
 
-			time_consume[i] = copy_time(fps, fpd);
+			time_consume[i] = copy_time(fps, fpd, 65536);
 
 			fclose(fps);
 			fclose(fpd);

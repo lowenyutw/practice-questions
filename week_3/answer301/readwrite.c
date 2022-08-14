@@ -1,20 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/types.h>
 
-double copy_time(FILE* fps, FILE* fpd)
+double copy_time(int fps, int fpd, int max)
 {
 	double start, end;
 	int c;
+	char* s = malloc(max);
 
 	start = clock();
 
-	while ((c = fgetc(fps)) != EOF)
+	while ((c = read(fps, s, max)) > 0)
 	{
-		fputc(c, fpd);
+		write(fpd, s, c);
 	}
 
 	end = clock();
+
+	free(s);
 
 	return (end - start) / CLOCKS_PER_SEC;
 }
@@ -34,7 +41,7 @@ void result_print(char* file_name, double* time_consume, int max)
 
 int main(int argc, char* argv[])
 {
-	FILE* fps, * fpd;
+	int fps, fpd;
 	double time_consume[10] = { 0 }, average_time = 0;
 	int data_max = sizeof time_consume / sizeof time_consume[0];
 
@@ -44,17 +51,16 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	fpd = fopen(argv[1], "w");
-	if (fpd == NULL)
+	fpd = open(argv[1], O_WRONLY | O_TRUNC);
+	if (fpd < 0)
 	{
 		perror(argv[1]);
 		exit(1);
 	}
 
-	fps = fopen(argv[2], "r");
-	if (fps == NULL)
+	fps = open(argv[2], O_RDONLY);
+	if (fps < 0)
 	{
-
 		char file_name[80];
 		int max = 67108864;
 
@@ -76,7 +82,7 @@ int main(int argc, char* argv[])
 				sprintf(file_name, "%dBytes.txt", data_size);
 			}
 
-			if ((fps = fopen(file_name, "r")) == NULL)
+			if ((fps = open(file_name, O_RDONLY) < 0))
 			{
 				perror(file_name);
 				exit(1);
@@ -84,13 +90,13 @@ int main(int argc, char* argv[])
 
 			for (int i = 0; i < 10; i++)
 			{
-				fps = fopen(file_name, "r");
-				fpd = fopen(argv[1], "w");
+				fps = open(file_name, O_RDONLY);
+				fpd = open(argv[1], O_WRONLY | O_TRUNC);
 
-				time_consume[i] = copy_time(fps, fpd);
+				time_consume[i] = copy_time(fps, fpd, 65536);
 
-				fclose(fps);
-				fclose(fpd);
+				close(fps);
+				close(fpd);
 			}
 
 			result_print(file_name, time_consume, data_max);
@@ -100,13 +106,13 @@ int main(int argc, char* argv[])
 	{
 		for (int i = 0; i < 10; i++)
 		{
-			fps = fopen(argv[2], "r");
-			fpd = fopen(argv[1], "w");
+			fps = open(argv[2], O_RDONLY);
+			fpd = open(argv[1], O_WRONLY | O_TRUNC);
 
-			time_consume[i] = copy_time(fps, fpd);
+			time_consume[i] = copy_time(fps, fpd, 65536);
 
-			fclose(fps);
-			fclose(fpd);
+			close(fps);
+			close(fpd);
 		}
 
 		result_print(argv[2], time_consume, data_max);
