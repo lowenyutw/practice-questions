@@ -26,24 +26,23 @@ double copy_time(int fps, int fpd, int max)
 	return (end - start) / CLOCKS_PER_SEC;
 }
 
-void result_print(char* file_name, double* time_consume, int max)
+void result_print(char* file_name, double time_consume, int max)
 {
 	double total_time = 0;
 
 	printf("File: %s\n", file_name);
 	for (int i = 0; i < max; i++)
 	{
-		total_time = total_time + *time_consume++;
+		total_time = total_time + time_consume;
 		//printf("%d: Use time: %lf\n", i + 1, *time_consume++);
 	}
-	printf("ten times average: %lf(s)\n\n", total_time / max);
+	printf("usage time: %lf(s)\n\n", total_time / max);
 }
 
 int main(int argc, char* argv[])
 {
 	int fps, fpd;
-	double time_consume[10] = { 0 }, average_time = 0;
-	int data_max = sizeof time_consume / sizeof time_consume[0];
+	double time_consume = 0, average_time = 0;
 
 	if (argc < 2 || argc > 3)
 	{
@@ -88,34 +87,28 @@ int main(int argc, char* argv[])
 				exit(1);
 			}
 
-			for (int i = 0; i < 10; i++)
-			{
-				fps = open(file_name, O_RDONLY);
-				fpd = open(argv[1], O_WRONLY | O_TRUNC);
+			fps = open(file_name, O_RDONLY);
+			fpd = open(argv[1], O_WRONLY | O_TRUNC);
 
-				time_consume[i] = copy_time(fps, fpd, 1);
+			time_consume = copy_time(fps, fpd, 1);
 
-				close(fps);
-				close(fpd);
-			}
+			close(fps);
+			close(fpd);
 
-			result_print(file_name, time_consume, data_max);
+			result_print(file_name, time_consume, 1);
 		}
 	}
 	else
 	{
-		for (int i = 0; i < 10; i++)
-		{
-			fps = open(argv[2], O_RDONLY);
-			fpd = open(argv[1], O_WRONLY | O_TRUNC);
+		fps = open(argv[2], O_RDONLY);
+		fpd = open(argv[1], O_WRONLY | O_TRUNC);
 
-			time_consume[i] = copy_time(fps, fpd, 1);
+		time_consume = copy_time(fps, fpd, 1);
 
-			close(fps);
-			close(fpd);
-		}
+		close(fps);
+		close(fpd);
 
-		result_print(argv[2], time_consume, data_max);
+		result_print(argv[2], time_consume, 1);
 	}
 
 	return 0;
