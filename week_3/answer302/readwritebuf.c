@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 				fps = open(file_name, O_RDONLY);
 				fpd = open(argv[1], O_WRONLY | O_TRUNC);
 
-				time_consume[i] = copy_time(fps, fpd, 1);
+				time_consume[i] = copy_time(fps, fpd, 65536);
 
 				close(fps);
 				close(fpd);
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 			fps = open(argv[2], O_RDONLY);
 			fpd = open(argv[1], O_WRONLY | O_TRUNC);
 
-			time_consume[i] = copy_time(fps, fpd, 1);
+			time_consume[i] = copy_time(fps, fpd, 65536);
 
 			close(fps);
 			close(fpd);
