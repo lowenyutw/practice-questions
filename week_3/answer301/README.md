@@ -1,6 +1,6 @@
 ## file_make
 256Byte～64MByte のファイルを作成します。
-* ファイルの間隔サイズは n*4 < 67108864。
+* ファイルの間隔サイズは n*4 <= 67108864。
 * 16 ～ 255 文字の間隔で改行 '\n' が追加されます。
 
 ## 測定方法
@@ -12,6 +12,7 @@
 ## 測定結果
 #### 実行時間の違い
 基準は fgetc fputc。
+実行時間基準は 64MBytes ファイルに設定されています。
 
 > char *fgets(char *str, int n, FILE *stream)  
 > size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)  
