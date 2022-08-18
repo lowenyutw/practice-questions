@@ -11,7 +11,7 @@
 
 ## 測定結果
 #### 実行時間の違い
-基準は fgetc fputc。
+基準は fgetc fputc。  
 実行時間基準は 64MBytes ファイルに設定されています。
 
 > char *fgets(char *str, int n, FILE *stream)  
