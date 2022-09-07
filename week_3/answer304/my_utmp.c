@@ -15,7 +15,6 @@ int main(void)
 
     while (1)
     {
-        // printf("------ulp start------\n");
         while (1)
         {
             ulp = calloc(1, sizeof(struct utmpxlist));
@@ -42,16 +41,8 @@ int main(void)
                 ulprev->next = ulp;
             }
 
-            // if (ulp->u.ut_type != DEAD_PROCESS)
-            // {
-            //     time_t t = ulp->u.ut_tv.tv_sec;
-            //     printf("%8.8s|%16.16s|%8.8s|%s", ulp->u.ut_user,
-            //            ulp->u.ut_host, ulp->u.ut_line, ctime(&t));
-            // }
-
             ulprev = ulp;
         }
-        // printf("------ulp end------\n");
 
         if (reful != NULL)
         {
@@ -174,31 +165,12 @@ int main(void)
                     }
                 }
             }
-
             if (!timep)
             {
                 printf("\n");
             }
             
             ulhead = reful;
-
-            /*while (ulhead->next != NULL)
-            {
-                if (ulhead->u.ut_type != DEAD_PROCESS)
-                {
-                    time_t t = ulhead->u.ut_tv.tv_sec;
-                    printf("%8.8s|%16.16s|%8.8s|%s", ulhead->u.ut_user,
-                           ulhead->u.ut_host, ulhead->u.ut_line, ctime(&t));
-                }
-                ulhead = ulhead->next;
-            }
-            if (ulhead->u.ut_type != DEAD_PROCESS)
-            {
-                time_t t = ulhead->u.ut_tv.tv_sec;
-                printf("%8.8s|%16.16s|%8.8s|%s", ulhead->u.ut_user,
-                       ulhead->u.ut_host, ulhead->u.ut_line, ctime(&t));
-            }
-            printf("------reful end------\n");*/
         }
         else
         {
