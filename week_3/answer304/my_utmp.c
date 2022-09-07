@@ -15,7 +15,7 @@ int main(void)
 
     while (1)
     {
-        //printf("------ulp start------\n");
+        // printf("------ulp start------\n");
         while (1)
         {
             ulp = calloc(1, sizeof(struct utmpxlist));
@@ -51,12 +51,14 @@ int main(void)
 
             ulprev = ulp;
         }
-        //printf("------ulp end------\n");
+        // printf("------ulp end------\n");
 
         if (reful != NULL)
         {
             struct utmpxlist *tmpul = reful;
             struct utmpxlist *refulprev = NULL;
+            time_t now = time(0);
+            int timep = 1;
             while (1)
             {
                 if (tmpul->u.ut_tv.tv_sec == ulhead->u.ut_tv.tv_sec)
@@ -82,7 +84,6 @@ int main(void)
                 }
                 else
                 {
-                    time_t now = time(0);
                     time_t tmpult = tmpul->u.ut_tv.tv_sec;
                     time_t ulheadt = ulhead->u.ut_tv.tv_sec;
 
@@ -90,7 +91,11 @@ int main(void)
                     {
                         if (tmpul->u.ut_type != DEAD_PROCESS || ulhead->u.ut_type != DEAD_PROCESS)
                         {
-                            printf("%s", ctime(&now));
+                            if (timep)
+                            {
+                                printf("%s", ctime(&now));
+                                timep = 0;
+                            }
 
                             if (ulhead->u.ut_type != DEAD_PROCESS)
                             {
@@ -101,7 +106,7 @@ int main(void)
 
                             if (tmpul->u.ut_type != DEAD_PROCESS)
                             {
-                                printf("%sRemoved:\n%8.8s|%16.16s|%8.8s|%s",
+                                printf("Removed:\n%8.8s|%16.16s|%8.8s|%s",
                                        tmpul->u.ut_user, tmpul->u.ut_host,
                                        tmpul->u.ut_line, ctime(&tmpult));
                             }
@@ -121,7 +126,11 @@ int main(void)
                     {
                         if (tmpul->u.ut_type != DEAD_PROCESS)
                         {
-                            printf("%s", ctime(&now));
+                            if (timep)
+                            {
+                                printf("%s", ctime(&now));
+                                timep = 0;
+                            }
                             printf("Removed:\n%8.8s|%16.16s|%8.8s|%s",
                                    tmpul->u.ut_user, tmpul->u.ut_host,
                                    tmpul->u.ut_line, ctime(&tmpult));
@@ -137,18 +146,40 @@ int main(void)
                     }
                     else
                     {
-                        if (ulhead->u.ut_type != DEAD_PROCESS)
+                        tmpul->next = ulhead;
+
+                        while (1)
                         {
-                            printf("%s", ctime(&now));
-                            printf("Added:\n%8.8s|%16.16s|%8.8s|%s",
-                                   ulhead->u.ut_user, ulhead->u.ut_host,
-                                   ulhead->u.ut_line, ctime(&ulheadt));
+                            if (ulhead->u.ut_type != DEAD_PROCESS)
+                            {
+                                if (timep)
+                                {
+                                    printf("%s", ctime(&now));
+                                    timep = 0;
+                                }
+                                printf("Added:\n%8.8s|%16.16s|%8.8s|%s",
+                                       ulhead->u.ut_user, ulhead->u.ut_host,
+                                       ulhead->u.ut_line, ctime(&ulheadt));
+                            }
+
+                            if (ulhead->next == NULL)
+                            {
+                                break;
+                            }
+
+                            ulhead = ulhead->next;
                         }
 
-                        tmpul->next = ulhead;
+                        break;
                     }
                 }
             }
+
+            if (!timep)
+            {
+                printf("\n");
+            }
+            
             ulhead = reful;
 
             /*while (ulhead->next != NULL)
