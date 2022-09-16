@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 extern char **environ;
 
-void my_system(const char *argv[])
+void my_system(char *argv[])
 {
     char **str = argv;
     str++;
