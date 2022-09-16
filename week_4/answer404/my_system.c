@@ -4,9 +4,11 @@
 
 extern char **environ;
 
-int my_system(const char *argv[])
+void my_system(const char *argv[])
 {
-    if(execve("/bin/sh", &argv[1], environ) < 0)
+    char **str = argv;
+    str++;
+    if(execvp(str[0], str) < 0)
     {
         perror("execve");
         exit(1);
@@ -18,9 +20,9 @@ int main(int argc, char *argv[])
     pid_t child;
     int status;
 
-    if(argc < 4)
+    if(argc < 2)
     {
-        fprintf(stderr, "Usage: %s sh -c \"[OPTION]\"\n", argv[0]);
+        fprintf(stderr, "Usage: %s \"[OPTION]\"\n", argv[0]);
         exit(1);
     }
 
