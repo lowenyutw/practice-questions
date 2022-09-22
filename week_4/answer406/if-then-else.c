@@ -5,11 +5,11 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-char **strfind(int argc, char *argv[], char *target)
+char **strfind(int *num, char *argv[], char *target)
 {
     int i;
     char **str = argv;
-    for (i = 0; i < argc; i++)
+    for (; *num > 0; *num -= 1)
     {
         if (strcmp(*str, target) != 0)
         {
@@ -18,6 +18,7 @@ char **strfind(int argc, char *argv[], char *target)
         else
         {
             *str = NULL;
+            *num -= 1;
             return str + 1;
         }
     }
@@ -28,7 +29,7 @@ char **strfind(int argc, char *argv[], char *target)
 int main(int argc, char *argv[])
 {
     pid_t child;
-    int status, s;
+    int status, num = argc;
     char **strthen = argv;
     char **strelse = argv;
 
@@ -38,8 +39,8 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    strthen = strfind(argc, argv, "then");
-    strelse = strfind(argc, strthen, "else");
+    strthen = strfind(&num, argv, "then");
+    strelse = strfind(&num, strthen, "else");
 
     if ((child = fork()) < 0)
     {
@@ -53,7 +54,7 @@ int main(int argc, char *argv[])
     else
     {
         wait(&status);
-        if(WEXITSTATUS(status) == 0)
+        if (WEXITSTATUS(status) == 0)
         {
             execvp(strthen[0], strthen);
         }
