@@ -33,9 +33,9 @@ int main(int argc, char *argv[])
         close(pipe1[0]);
         close(pipe2[1]);
         while(num < max)
-        {
-            fflush(stdout);
+        {            
             printf("%d", i % 10);
+            fflush(stdout);
 
             i++;
             num++;
@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
                 exit(1);
             }
         }
+        exit(0);
     }
     else
     {
@@ -66,8 +67,8 @@ int main(int argc, char *argv[])
             
             if (num < max)
             {
-                fflush(stdout);
                 printf("%c", (char)(i%26)+97);
+                fflush(stdout);
             }
 
             i++;
